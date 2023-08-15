@@ -20,6 +20,7 @@ private slots:
     void calcTabel3();
     void calcTabel4();
     void calcTabel5();
+    void setupTab(QWidget *tab, const QString &title, const QString &content);
 
 
 private:
@@ -71,6 +72,7 @@ private:
     QLineEdit *nCDamageLineEdit;
     QLabel *eDCACriticalLabel;      //包含命中会心的伤害期望   Expected Damage with Accurate Critical
     QLineEdit *eDCACriticalLineEdit;
+
     QPushButton *calcButton;        //计算
 };
 #endif // NSHCALC_H
