@@ -155,6 +155,36 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     inputLayout2->addWidget(bCRateLabel, 3, 8);
     inputLayout2->addWidget(bCRateLineEdit, 4, 8);
 
+
+    QWidget *tmpLayout3 = new QWidget;
+    QGridLayout *inputLayout3 = new QGridLayout(tmpLayout3);
+    layout->addWidget(tmpLayout3);
+
+    rDefenseLabel = new QLabel(tr("剩余防御"));
+    rDefenseLineEdit = new QLineEdit;
+    dReductionLabel = new QLabel(tr("防御减免"));
+    dReductionLineEdit = new QLineEdit;
+    rAegisLabel = new QLabel(tr("剩余气盾"));
+    rAegisLineEdit = new QLineEdit;
+    eRReductionLabel = new QLabel(tr("元素抗性减免"));
+    eRReductionLineEdit = new QLineEdit;
+    aARateLabel = new QLabel(tr("实际命中率"));
+    aARateLineEdit = new QLineEdit;
+    aCRateLabel = new QLabel(tr("实际会心率"));
+    aCRateLineEdit = new QLineEdit;
+
+    inputLayout3->addWidget(rDefenseLabel, 5, 0);
+    inputLayout3->addWidget(rDefenseLineEdit, 6, 0);
+    inputLayout3->addWidget(dReductionLabel, 5, 1);
+    inputLayout3->addWidget(dReductionLineEdit, 6, 1);
+    inputLayout3->addWidget(rAegisLabel, 5, 2);
+    inputLayout3->addWidget(rAegisLineEdit, 6, 2);
+    inputLayout3->addWidget(eRReductionLabel, 5, 3);
+    inputLayout3->addWidget(eRReductionLineEdit, 6, 3);
+    inputLayout3->addWidget(aARateLabel, 5, 4);
+    inputLayout3->addWidget(aARateLineEdit, 6, 4);
+    inputLayout3->addWidget(aCRateLabel, 5, 5);
+    inputLayout3->addWidget(aCRateLineEdit, 6, 5);
 }
 
 void NshCalc::setupAttackTab() {}
@@ -214,6 +244,8 @@ void NshCalc::onComboBoxChanged(int index)
     blockLineEdit->setText(QString::number(block));
     cResistanceLineEdit->setText(QString::number(cResistance));
 }
+
+void NshCalc::calcTmpValue() {}
 
 // 辅助函数，用于设置标签页的内容和布局
 //void NshCalc::setupTab(QWidget *tab, const QString &title, const QString &content)
