@@ -28,8 +28,10 @@ private slots:
     void setupDefenseBreakTab();
     void setupAccuracyTab();
     void setupCriticalTab();
-
+    void calc();
     int getValue(QLineEdit *line);
+//    void comboBoxIndexChanged(int index);        //选择函数
+    void onComboBoxChanged(int index);
 
 //    void setupTab(QWidget *tab, const QString &title, const QString &content);
 
@@ -44,6 +46,7 @@ private:
     QWidget *defenseBreakTab = new QWidget;     // 破防提升收益
     QWidget *accuracyTab = new QWidget;         // 命中提升收益
     QWidget *criticalTab = new QWidget;         // 会心提升收益
+    QWidget *settingTab = new QWidget;          // 设置
 
     int defense;
     int aegis;

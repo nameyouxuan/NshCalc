@@ -12,6 +12,12 @@ NshCalc::NshCalc(QWidget *parent)
     this->setWindowIcon(icon);
     tabWidget = new QTabWidget(this);
 
+    defense = 1600;
+    aegis = 206;
+    eResistance = 0;
+    resilience = 0;
+    block = 540;
+    cResistance = 150;
 
     // 将标签页添加到 QTabWidget
     tabWidget->addTab(inputTab, "属性输入");
@@ -20,6 +26,7 @@ NshCalc::NshCalc(QWidget *parent)
     tabWidget->addTab(defenseBreakTab, "破防提升收益");
     tabWidget->addTab(accuracyTab, "命中提升收益");
     tabWidget->addTab(criticalTab, "会心提升收益");
+    tabWidget->addTab(settingTab, "设置");
 
 
 //    QWidget *tab1 = new QWidget();  // 属性输入
@@ -69,12 +76,14 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     inputLayout1->addWidget(selectComboBox);
     tmpLayout1->setLayout(inputLayout1);
 
+
+//    connect(selectComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), layout, &NshCalc::comboBoxIndexChanged);
+    connect(selectComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onComboBoxChanged(int)));
+
     defenseLabel = new QLabel(tr("防御"));
     defenseLineEdit = new QLineEdit;
-    defenseTextLine = new QTextLine;
     aegisLabel = new QLabel(tr("气盾"));
     aegisLineEdit = new QLineEdit;
-    aegisTextLine= new QTextLine;
     eResistanceLabel = new QLabel(tr("元素抗性"));
     eResistanceLineEdit = new QLineEdit;
     resilienceLabel = new QLabel(tr("抵御"));
@@ -83,6 +92,13 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     blockLineEdit = new QLineEdit;
     cResistanceLabel = new QLabel(tr("会心抵抗"));
     cResistanceLineEdit = new QLineEdit;
+
+    defenseLineEdit->setText(QString::number(defense));
+    aegisLineEdit->setText(QString::number(aegis));
+    eResistanceLineEdit->setText(QString::number(eResistance));
+    resilienceLineEdit->setText(QString::number(resilience));
+    blockLineEdit->setText(QString::number(block));
+    cResistanceLineEdit->setText(QString::number(cResistance));
 
     inputLayout1->addWidget(defenseLabel, 1, 0);
     inputLayout1->addWidget(defenseLineEdit, 2, 0);
@@ -139,7 +155,6 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     inputLayout2->addWidget(bCRateLabel, 3, 8);
     inputLayout2->addWidget(bCRateLineEdit, 4, 8);
 
-
 }
 
 void NshCalc::setupAttackTab() {}
@@ -148,12 +163,56 @@ void NshCalc::setupDefenseBreakTab() {}
 void NshCalc::setupAccuracyTab() {}
 void NshCalc::setupCriticalTab() {}
 
-int NshCalc::getValue(QLineEdit *line) {
+int NshCalc::getValue(QLineEdit *line)
+{
     bool ok;
     QString tmpStr;
     QString vStr = line->text();
     int vInt = vStr.toInt(&ok);
     return vInt;
+}
+
+
+void NshCalc::calc()
+{
+    attack = getValue(attackLineEdit);
+    aPenetration = getValue(aPenetrationLineEdit);
+    sBreak = getValue(sBreakLineEdit);
+    eAttack = getValue(eAttackLineEdit);
+    advantage = getValue(advantageLineEdit);
+    accuracy = getValue(accuracyLineEdit);
+    cHit = getValue(cHitLineEdit);
+    cDamage = getValue(cDamageLineEdit);
+    bCRate = getValue(bCRateLineEdit);
+}
+
+void NshCalc::onComboBoxChanged(int index)
+{
+    if (index == 1)
+    {
+        defense = 1000;
+        aegis = 206;
+        eResistance = 0;
+        resilience = 0;
+        block = 265;
+        cResistance = 150;
+    }
+    else
+    {
+        defense = 1600;
+        aegis = 206;
+        eResistance = 0;
+        resilience = 0;
+        block = 540;
+        cResistance = 150;
+    }
+
+    defenseLineEdit->setText(QString::number(defense));
+    aegisLineEdit->setText(QString::number(aegis));
+    eResistanceLineEdit->setText(QString::number(eResistance));
+    resilienceLineEdit->setText(QString::number(resilience));
+    blockLineEdit->setText(QString::number(block));
+    cResistanceLineEdit->setText(QString::number(cResistance));
 }
 
 // 辅助函数，用于设置标签页的内容和布局
