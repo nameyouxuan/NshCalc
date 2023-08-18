@@ -2,7 +2,6 @@
 #include <QVBoxLayout>
 #include <QTabWidget>
 #include <QLabel>
-#include <QGridLayout>
 #include <QDebug>
 
 NshCalc::NshCalc(QWidget *parent)
@@ -11,77 +10,34 @@ NshCalc::NshCalc(QWidget *parent)
     setWindowTitle(tr("逆水寒计算器"));
     QIcon icon("favicon.ico");
     this->setWindowIcon(icon);
-    QTabWidget *tabWidget = new QTabWidget(this);
+    tabWidget = new QTabWidget(this);
 
-    QWidget *tab1 = new QWidget();  // 属性输入
-    QWidget *tab2 = new QWidget();  // 攻击提升收益
-    QWidget *tab3 = new QWidget();  // 元素攻击提升收益
-    QWidget *tab4 = new QWidget();  // 破防提升收益
-    QWidget *tab5 = new QWidget();  // 命中提升收益
-    QWidget *tab6 = new QWidget();  // 会心提升收益
-
-    // 设置标签页内容和布局
-//    setupTab(tab1, "属性输入", "属性输入内容");
-
-    //属性输入界面
-//    QVBoxLayout *layout1 = new QVBoxLayout(tab1);
-//    QLabel *label1 = new QLabel("属性输入界面");
-
-    QGridLayout *inputLayout = new QGridLayout(this);
-    attackLabel = new QLabel(tr("攻击"));
-    attackLineEdit = new QLineEdit;
-    inputLayout->addWidget(attackLabel, 0, 0);
-    inputLayout->addWidget(attackLineEdit, 1, 0);
-    aPenetrationLabel = new QLabel(tr("破防"));
-    aPenetrationLineEdit = new QLineEdit;
-    inputLayout->addWidget(aPenetrationLabel, 0, 1);
-    inputLayout->addWidget(aPenetrationLineEdit, 1, 1);
-    sBreakLabel = new QLabel("破盾");
-    sBreakLineEdit = new QLineEdit;
-    inputLayout->addWidget(sBreakLabel, 0, 2);
-    inputLayout->addWidget(sBreakLineEdit, 1, 2);
-    eAttackLabel = new QLabel(tr("元素攻击"));
-    eAttackLineEdit = new QLineEdit;
-    inputLayout->addWidget(eAttackLabel, 0, 3);
-    inputLayout->addWidget(eAttackLineEdit, 1, 3);
-    advantageLabel = new QLabel;
-    advantageLineEdit = new QLineEdit;
-    inputLayout->addWidget(advantageLabel, 0, 4);
-    inputLayout->addWidget(advantageLineEdit, 1, 4);
-    accuracyLabel = new QLabel(tr("命中"));
-    accuracyLineEdit = new QLineEdit();
-    inputLayout->addWidget(accuracyLabel, 0, 5);
-    inputLayout->addWidget(accuracyLineEdit, 1, 5);
-    cHitLabel = new QLabel(tr("会心"));
-    cHitLineEdit = new QLineEdit;
-    inputLayout->addWidget(cHitLabel, 0, 6);
-    inputLayout->addWidget(cHitLineEdit, 1, 6);
-    cDamageLabel = new QLabel(tr("会伤"));
-    cDamageLineEdit = new QLineEdit;
-    inputLayout->addWidget(cDamageLabel, 0, 7);
-    inputLayout->addWidget(cDamageLineEdit, 1, 7);
-    bCRateLabel = new QLabel(tr("额外会心率"));
-    bCRateLineEdit = new QLineEdit;
-    inputLayout->addWidget(bCRateLabel, 0, 8);
-    inputLayout->addWidget(bCRateLineEdit, 1, 8);
-
-//    layout1->addWidget(label1);
-    tab1->setLayout(inputLayout);
-
-
-    setupTab(tab2, "攻击提升收益", "攻击提升收益内容");
-    setupTab(tab3, "元素攻击提升收益", "元素攻击提升收益内容");
-    setupTab(tab4, "破防提升收益", "破防提升收益内容");
-    setupTab(tab5, "命中提升收益", "命中提升收益内容");
-    setupTab(tab6, "会心提升收益", "会心提升收益内容");
 
     // 将标签页添加到 QTabWidget
-    tabWidget->addTab(tab1, tr("属性输入"));
-    tabWidget->addTab(tab2, tr("攻击提升收益"));
-    tabWidget->addTab(tab3, tr("元素攻击提升收益"));
-    tabWidget->addTab(tab4, tr("破防提升收益"));
-    tabWidget->addTab(tab5, tr("命中提升收益"));
-    tabWidget->addTab(tab6, tr("会心提升收益"));
+    tabWidget->addTab(inputTab, "属性输入");
+    tabWidget->addTab(attackTab, "攻击提升收益");
+    tabWidget->addTab(eAttackTab, "元素攻击提升收益");
+    tabWidget->addTab(defenseBreakTab, "破防提升收益");
+    tabWidget->addTab(accuracyTab, "命中提升收益");
+    tabWidget->addTab(criticalTab, "会心提升收益");
+
+
+//    QWidget *tab1 = new QWidget();  // 属性输入
+//    QWidget *tab2 = new QWidget();  // 攻击提升收益
+//    QWidget *tab3 = new QWidget();  // 元素攻击提升收益
+//    QWidget *tab4 = new QWidget();  // 破防提升收益
+//    QWidget *tab5 = new QWidget();  // 命中提升收益
+//    QWidget *tab6 = new QWidget();  // 会心提升收益
+
+//    setupInputTab(inputTab);
+
+    inputLayout = new QGridLayout(this);
+
+    setupInputTab(inputLayout);
+
+
+    inputTab->setLayout(inputLayout);
+
 
     // 使用网格布局进行平铺
     QGridLayout *gridLayout = new QGridLayout;
@@ -100,21 +56,111 @@ NshCalc::~NshCalc()
 {
 }
 
-// 辅助函数，用于设置标签页的内容和布局
-void NshCalc::setupTab(QWidget *tab, const QString &title, const QString &content)
+void NshCalc::setupInputTab(QGridLayout *layout)
 {
-    QVBoxLayout *layout = new QVBoxLayout(tab);
-    QLabel *label = new QLabel(content);
-    layout->addWidget(label);
-    tab->setLayout(layout);
+    selectComboBox = new QComboBox();
+    QWidget *tmpLayout1 = new QWidget;
+    layout->addWidget(tmpLayout1);
+
+    QGridLayout *inputLayout1 = new QGridLayout(tmpLayout1);
+
+    selectComboBox->addItem(tr("英雄舞阳Boss"));
+    selectComboBox->addItem(tr("帮会木桩"));
+    inputLayout1->addWidget(selectComboBox);
+    tmpLayout1->setLayout(inputLayout1);
+
+    defenseLabel = new QLabel(tr("防御"));
+    defenseLineEdit = new QLineEdit;
+    defenseTextLine = new QTextLine;
+    aegisLabel = new QLabel(tr("气盾"));
+    aegisLineEdit = new QLineEdit;
+    aegisTextLine= new QTextLine;
+    eResistanceLabel = new QLabel(tr("元素抗性"));
+    eResistanceLineEdit = new QLineEdit;
+    resilienceLabel = new QLabel(tr("抵御"));
+    resilienceLineEdit = new QLineEdit;
+    blockLabel = new QLabel(tr("格挡"));
+    blockLineEdit = new QLineEdit;
+    cResistanceLabel = new QLabel(tr("会心抵抗"));
+    cResistanceLineEdit = new QLineEdit;
+
+    inputLayout1->addWidget(defenseLabel, 1, 0);
+    inputLayout1->addWidget(defenseLineEdit, 2, 0);
+    inputLayout1->addWidget(aegisLabel, 1, 1);
+    inputLayout1->addWidget(aegisLineEdit, 2, 1);
+    inputLayout1->addWidget(eResistanceLabel, 1, 2);
+    inputLayout1->addWidget(eResistanceLineEdit, 2, 2);
+    inputLayout1->addWidget(resilienceLabel, 1, 3);
+    inputLayout1->addWidget(resilienceLineEdit, 2, 3);
+    inputLayout1->addWidget(blockLabel, 1, 4);
+    inputLayout1->addWidget(blockLineEdit, 2, 4);
+    inputLayout1->addWidget(cResistanceLabel, 1, 5);
+    inputLayout1->addWidget(cResistanceLineEdit, 2, 5);
+
+    QWidget *tmpLayout2 = new QWidget;
+    QGridLayout *inputLayout2 = new QGridLayout(tmpLayout2);
+    layout->addWidget(tmpLayout2);
+
+
+    attackLabel = new QLabel(tr("攻击"));
+    attackLineEdit = new QLineEdit;
+    inputLayout2->addWidget(attackLabel, 3, 0);
+    inputLayout2->addWidget(attackLineEdit, 4, 0);
+    aPenetrationLabel = new QLabel(tr("破防"));
+    aPenetrationLineEdit = new QLineEdit;
+    inputLayout2->addWidget(aPenetrationLabel, 3, 1);
+    inputLayout2->addWidget(aPenetrationLineEdit, 4, 1);
+    sBreakLabel = new QLabel("破盾");
+    sBreakLineEdit = new QLineEdit;
+    inputLayout2->addWidget(sBreakLabel, 3, 2);
+    inputLayout2->addWidget(sBreakLineEdit, 4, 2);
+    eAttackLabel = new QLabel(tr("元素攻击"));
+    eAttackLineEdit = new QLineEdit;
+    inputLayout2->addWidget(eAttackLabel, 3, 3);
+    inputLayout2->addWidget(eAttackLineEdit, 4, 3);
+    advantageLabel = new QLabel(tr("克制"));
+    advantageLineEdit = new QLineEdit;
+    inputLayout2->addWidget(advantageLabel, 3, 4);
+    inputLayout2->addWidget(advantageLineEdit, 4, 4);
+    accuracyLabel = new QLabel(tr("命中"));
+    accuracyLineEdit = new QLineEdit();
+    inputLayout2->addWidget(accuracyLabel, 3, 5);
+    inputLayout2->addWidget(accuracyLineEdit, 4, 5);
+    cHitLabel = new QLabel(tr("会心"));
+    cHitLineEdit = new QLineEdit;
+    inputLayout2->addWidget(cHitLabel, 3, 6);
+    inputLayout2->addWidget(cHitLineEdit, 4, 6);
+    cDamageLabel = new QLabel(tr("会伤"));
+    cDamageLineEdit = new QLineEdit;
+    inputLayout2->addWidget(cDamageLabel, 3, 7);
+    inputLayout2->addWidget(cDamageLineEdit, 4, 7);
+    bCRateLabel = new QLabel(tr("额外会心率"));
+    bCRateLineEdit = new QLineEdit;
+    inputLayout2->addWidget(bCRateLabel, 3, 8);
+    inputLayout2->addWidget(bCRateLineEdit, 4, 8);
+
+
 }
 
-void NshCalc::calcTabel1() {}
+void NshCalc::setupAttackTab() {}
+void NshCalc::setupEAttackTab() {}
+void NshCalc::setupDefenseBreakTab() {}
+void NshCalc::setupAccuracyTab() {}
+void NshCalc::setupCriticalTab() {}
 
-void NshCalc::calcTabel2() {}
+int NshCalc::getValue(QLineEdit *line) {
+    bool ok;
+    QString tmpStr;
+    QString vStr = line->text();
+    int vInt = vStr.toInt(&ok);
+    return vInt;
+}
 
-void NshCalc::calcTabel3() {}
-
-void NshCalc::calcTabel4() {}
-
-void NshCalc::calcTabel5() {}
+// 辅助函数，用于设置标签页的内容和布局
+//void NshCalc::setupTab(QWidget *tab, const QString &title, const QString &content)
+//{
+//    QVBoxLayout *layout = new QVBoxLayout(tab);
+//    QLabel *label = new QLabel(content);
+//    layout->addWidget(label);
+//    tab->setLayout(layout);
+//}

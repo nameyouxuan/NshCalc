@@ -4,7 +4,14 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QLineEdit>
+#include <QTextLine>
 #include <QPushButton>
+#include <QComboBox>
+#include <QGridLayout>
+
+const double coefficient2 = 0.324;
+const double coefficient1 = 923 * coefficient2;
+
 
 class NshCalc : public QMainWindow
 {
@@ -15,26 +22,65 @@ public:
     ~NshCalc();
 
 private slots:
-    void calcTabel1();
-    void calcTabel2();
-    void calcTabel3();
-    void calcTabel4();
-    void calcTabel5();
-    void setupTab(QWidget *tab, const QString &title, const QString &content);
+    void setupInputTab(QGridLayout *layout);
+    void setupAttackTab();
+    void setupEAttackTab();
+    void setupDefenseBreakTab();
+    void setupAccuracyTab();
+    void setupCriticalTab();
+
+    int getValue(QLineEdit *line);
+
+//    void setupTab(QWidget *tab, const QString &title, const QString &content);
 
 
 private:
+    QTabWidget *tabWidget;
+    QComboBox *selectComboBox;      //选择英雄舞阳Boss or 帮会木桩
+    QGridLayout *inputLayout;       //输入攻击方面板属性
+    QWidget *inputTab = new QWidget;            // 属性输入
+    QWidget *attackTab = new QWidget;           // 攻击提升收益
+    QWidget *eAttackTab = new QWidget;          // 元素攻击提升收益
+    QWidget *defenseBreakTab = new QWidget;     // 破防提升收益
+    QWidget *accuracyTab = new QWidget;         // 命中提升收益
+    QWidget *criticalTab = new QWidget;         // 会心提升收益
+
+    int defense;
+    int aegis;
+    int eResistance;
+    int resilience;
+    int block;
+    int cResistance;
+
+
     QLabel *defenseLabel;           //防御        Defense
     QLineEdit *defenseLineEdit;
+    QTextLine *defenseTextLine;
+    QLabel *aegisLabel;             //气盾        Aegis
+    QLineEdit *aegisLineEdit;
+    QTextLine *aegisTextLine;
     QLabel *eResistanceLabel;       //元素抗性      Elemental Resistance
     QLineEdit *eResistanceLineEdit;
+    QTextLine *eResistanceTextLine;
     QLabel *resilienceLabel;        //抵御        Resilience
     QLineEdit *resilienceLineEdit;
+    QTextLine *resilienceTextLine;
     QLabel *blockLabel;             //格挡        Block
     QLineEdit *blockLineEdit;
+    QTextLine *blockTextLine;
     QLabel *cResistanceLabel;       //会心抵抗      Critical Resistance
     QLineEdit *cResistanceLineEdit;
+    QTextLine *cResistanceTextLine;
 
+    int attack;
+    int aPenetration;
+    int sBreak;
+    int eAttack;
+    int advantage;
+    int accuracy;
+    int cHit;
+    int cDamage;
+    int bCRate;
 
     QLabel *attackLabel;            //攻击        Attack
     QLineEdit *attackLineEdit;
@@ -72,6 +118,28 @@ private:
     QLineEdit *nCDamageLineEdit;
     QLabel *eDCACriticalLabel;      //包含命中会心的伤害期望   Expected Damage with Accurate Critical
     QLineEdit *eDCACriticalLineEdit;
+
+    QLabel *attackBonus42Label;       //攻击提升42点
+    QLineEdit *attackBonus42LineEdit;
+    QLabel *defenseBreakBonus63Label;   //破防提升63点
+    QLineEdit *defenseBreakBonus63LineEdit;
+    QLabel *elementalAttackBonus27Label;  //元素攻击提升27点
+    QLineEdit *elementalAttackBonus27LineEdit;
+    QLabel *accuracyBonus21Label;   //命中提升21点
+    QLineEdit *accuracyBonus21LineEdit;
+    QLabel *criticalBonus25Label;   // 会心提升25点
+    QLineEdit *criticalBonus25LineEdit;
+
+    QLabel *attackBonus40Label;       //攻击提升40点
+    QLineEdit *attackBonus40LineEdit;
+    QLabel *defenseBreakBonus40Label;   //破防提升40点
+    QLineEdit *defenseBreakBonus40LineEdit;
+    QLabel *elementalAttackBonus40Label;  //元素攻击提升40点
+    QLineEdit *elementalAttackBonus40LineEdit;
+    QLabel *accuracyBonus40Label;   //命中提升40点
+    QLineEdit *accuracyBonus40LineEdit;
+    QLabel *criticalBonus40Label;   // 会心提升40点
+    QLineEdit *criticalBonus40LineEdit;
 
     QPushButton *calcButton;        //计算
 };
