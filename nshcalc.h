@@ -30,8 +30,8 @@ private slots:
     void setupCriticalTab();
     void calc();
     int getValue(QLineEdit *line);
-//    void comboBoxIndexChanged(int index);        //选择函数
     void onComboBoxChanged(int index);
+    void calcTmpValue();
 
 //    void setupTab(QWidget *tab, const QString &title, const QString &content);
 
@@ -58,22 +58,17 @@ private:
 
     QLabel *defenseLabel;           //防御        Defense
     QLineEdit *defenseLineEdit;
-    QTextLine *defenseTextLine;
     QLabel *aegisLabel;             //气盾        Aegis
     QLineEdit *aegisLineEdit;
-    QTextLine *aegisTextLine;
     QLabel *eResistanceLabel;       //元素抗性      Elemental Resistance
     QLineEdit *eResistanceLineEdit;
-    QTextLine *eResistanceTextLine;
     QLabel *resilienceLabel;        //抵御        Resilience
     QLineEdit *resilienceLineEdit;
-    QTextLine *resilienceTextLine;
     QLabel *blockLabel;             //格挡        Block
     QLineEdit *blockLineEdit;
     QTextLine *blockTextLine;
     QLabel *cResistanceLabel;       //会心抵抗      Critical Resistance
     QLineEdit *cResistanceLineEdit;
-    QTextLine *cResistanceTextLine;
 
     int attack;
     int aPenetration;
@@ -104,8 +99,16 @@ private:
     QLabel *bCRateLabel;            //额外会心率     Bonus Critical Rate
     QLineEdit *bCRateLineEdit;
 
+    int rDefense;
+    double dReduction;
+    int rAegis;
+    double eRReduction;
+    double aARate;
+    double aCRate;
+    int nCDamage;
+    int eDCACritica;
 
-    QLabel *rDefenseLabel;          //剩余防御      Remaining Defense
+    QLabel *rDefenseLabel;          // 剩余防御      Remaining Defense
     QLineEdit *rDefenseLineEdit;
     QLabel *dReductionLabel;        //防御减免      Defense Reduction
     QLineEdit *dReductionLineEdit;

@@ -245,7 +245,16 @@ void NshCalc::onComboBoxChanged(int index)
     cResistanceLineEdit->setText(QString::number(cResistance));
 }
 
-void NshCalc::calcTmpValue() {}
+void NshCalc::calcTmpValue()
+{
+    rDefense = std::max(defense - aPenetration, 0); //剩余防御
+    dReduction = 1.0 * defense / (defense + 2860);  //防御减免
+    rAegis = 0;     //剩余气盾
+    eRReduction = 1.0 * eResistance / (eResistance + 530);      //元素抗性减免
+    double tmpAARate = 1.0 * (143.0 * accuracy / (1.0 * accuracy + 713) - 143.0 * block / (1.0 * block + 713) + 95) / 100.0;
+    aARate = std::min(tmpAARate, 1.0);              //实际命中率
+    aCRate = ((115.0 * (cHit - cResistance) + 90) / ((cHit - cResistance) + 940) * 1.0 / 100) + bCRate;     //实际会心率
+}
 
 // 辅助函数，用于设置标签页的内容和布局
 //void NshCalc::setupTab(QWidget *tab, const QString &title, const QString &content)
