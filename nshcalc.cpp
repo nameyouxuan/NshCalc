@@ -8,7 +8,7 @@ NshCalc::NshCalc(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("逆水寒计算器"));
-    QIcon icon("favicon.ico");
+    QIcon icon("../NshCalc/favicon.ico");
     this->setWindowIcon(icon);
     tabWidget = new QTabWidget(this);
 
