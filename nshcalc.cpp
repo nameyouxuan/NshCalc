@@ -122,38 +122,56 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     attackLineEdit = new QLineEdit;
     inputLayout2->addWidget(attackLabel, 3, 0);
     inputLayout2->addWidget(attackLineEdit, 4, 0);
+//    connect(attackLineEdit, &QLineEdit::textChanged, this, NshCalc::calcTmpValue());
+    connect(attackLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     aPenetrationLabel = new QLabel(tr("破防"));
     aPenetrationLineEdit = new QLineEdit;
     inputLayout2->addWidget(aPenetrationLabel, 3, 1);
     inputLayout2->addWidget(aPenetrationLineEdit, 4, 1);
+    connect(aPenetrationLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     sBreakLabel = new QLabel("破盾");
     sBreakLineEdit = new QLineEdit;
     inputLayout2->addWidget(sBreakLabel, 3, 2);
     inputLayout2->addWidget(sBreakLineEdit, 4, 2);
+    connect(sBreakLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     eAttackLabel = new QLabel(tr("元素攻击"));
     eAttackLineEdit = new QLineEdit;
     inputLayout2->addWidget(eAttackLabel, 3, 3);
     inputLayout2->addWidget(eAttackLineEdit, 4, 3);
+    connect(eAttackLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     advantageLabel = new QLabel(tr("克制"));
     advantageLineEdit = new QLineEdit;
     inputLayout2->addWidget(advantageLabel, 3, 4);
     inputLayout2->addWidget(advantageLineEdit, 4, 4);
+    connect(advantageLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     accuracyLabel = new QLabel(tr("命中"));
     accuracyLineEdit = new QLineEdit();
     inputLayout2->addWidget(accuracyLabel, 3, 5);
     inputLayout2->addWidget(accuracyLineEdit, 4, 5);
+    connect(accuracyLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     cHitLabel = new QLabel(tr("会心"));
     cHitLineEdit = new QLineEdit;
     inputLayout2->addWidget(cHitLabel, 3, 6);
     inputLayout2->addWidget(cHitLineEdit, 4, 6);
+    connect(cHitLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     cDamageLabel = new QLabel(tr("会伤"));
     cDamageLineEdit = new QLineEdit;
     inputLayout2->addWidget(cDamageLabel, 3, 7);
     inputLayout2->addWidget(cDamageLineEdit, 4, 7);
+    connect(cDamageLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
     bCRateLabel = new QLabel(tr("额外会心率"));
     bCRateLineEdit = new QLineEdit;
     inputLayout2->addWidget(bCRateLabel, 3, 8);
     inputLayout2->addWidget(bCRateLineEdit, 4, 8);
+    connect(bCRateLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
 
 
     QWidget *tmpLayout3 = new QWidget;
@@ -247,6 +265,7 @@ void NshCalc::onComboBoxChanged(int index)
 
 void NshCalc::calcTmpValue()
 {
+    calc();
     rDefense = std::max(defense - aPenetration, 0); //剩余防御
     dReduction = 1.0 * defense / (defense + 2860);  //防御减免
     rAegis = 0;     //剩余气盾
@@ -254,6 +273,12 @@ void NshCalc::calcTmpValue()
     double tmpAARate = 1.0 * (143.0 * accuracy / (1.0 * accuracy + 713) - 143.0 * block / (1.0 * block + 713) + 95) / 100.0;
     aARate = std::min(tmpAARate, 1.0);              //实际命中率
     aCRate = ((115.0 * (cHit - cResistance) + 90) / ((cHit - cResistance) + 940) * 1.0 / 100) + bCRate;     //实际会心率
+    rDefenseLineEdit->setText(QString::number(rDefense));
+    dReductionLineEdit->setText(QString::number(dReduction));
+    rAegisLineEdit->setText(QString::number(rAegis));
+    eRReductionLineEdit->setText(QString::number(eRReduction));
+    aARateLineEdit->setText(QString::number(aARate));
+    aCRateLineEdit->setText(QString::number(aCRate));
 }
 
 // 辅助函数，用于设置标签页的内容和布局
