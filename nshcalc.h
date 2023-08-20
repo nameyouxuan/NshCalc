@@ -33,7 +33,7 @@ private slots:
     void onComboBoxChanged(int index);
     void calcTmpValue();
 
-//    void setupTab(QWidget *tab, const QString &title, const QString &content);
+    //    void setupTab(QWidget *tab, const QString &title, const QString &content);
 
 
 private:

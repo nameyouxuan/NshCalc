@@ -29,14 +29,14 @@ NshCalc::NshCalc(QWidget *parent)
     tabWidget->addTab(settingTab, "设置");
 
 
-//    QWidget *tab1 = new QWidget();  // 属性输入
-//    QWidget *tab2 = new QWidget();  // 攻击提升收益
-//    QWidget *tab3 = new QWidget();  // 元素攻击提升收益
-//    QWidget *tab4 = new QWidget();  // 破防提升收益
-//    QWidget *tab5 = new QWidget();  // 命中提升收益
-//    QWidget *tab6 = new QWidget();  // 会心提升收益
+    //    QWidget *tab1 = new QWidget();  // 属性输入
+    //    QWidget *tab2 = new QWidget();  // 攻击提升收益
+    //    QWidget *tab3 = new QWidget();  // 元素攻击提升收益
+    //    QWidget *tab4 = new QWidget();  // 破防提升收益
+    //    QWidget *tab5 = new QWidget();  // 命中提升收益
+    //    QWidget *tab6 = new QWidget();  // 会心提升收益
 
-//    setupInputTab(inputTab);
+    //    setupInputTab(inputTab);
 
     inputLayout = new QGridLayout(this);
 
@@ -77,7 +77,7 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     tmpLayout1->setLayout(inputLayout1);
 
 
-//    connect(selectComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), layout, &NshCalc::comboBoxIndexChanged);
+    //    connect(selectComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), layout, &NshCalc::comboBoxIndexChanged);
     connect(selectComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onComboBoxChanged(int)));
 
     defenseLabel = new QLabel(tr("防御"));
@@ -122,7 +122,7 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     attackLineEdit = new QLineEdit;
     inputLayout2->addWidget(attackLabel, 3, 0);
     inputLayout2->addWidget(attackLineEdit, 4, 0);
-//    connect(attackLineEdit, &QLineEdit::textChanged, this, NshCalc::calcTmpValue());
+    //    connect(attackLineEdit, &QLineEdit::textChanged, this, NshCalc::calcTmpValue());
     connect(attackLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
 
     aPenetrationLabel = new QLabel(tr("破防"));
