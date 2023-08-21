@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QGridLayout>
+#include <QTabWidget>
 
 const double coefficient2 = 0.324;
 const double coefficient1 = 923 * coefficient2;
@@ -28,25 +29,30 @@ private slots:
     void setupDefenseBreakTab();
     void setupAccuracyTab();
     void setupCriticalTab();
+    void setupSettingsTab(QGridLayout *layout);
     void calc();
-    int getValue(QLineEdit *line);
+
     void onComboBoxChanged(int index);
     void calcTmpValue();
 
     //    void setupTab(QWidget *tab, const QString &title, const QString &content);
 
+public:
+    template <typename T>
+    T getValue(QLineEdit *line);
 
 private:
     QTabWidget *tabWidget;
     QComboBox *selectComboBox;      //选择英雄舞阳Boss or 帮会木桩
     QGridLayout *inputLayout;       //输入攻击方面板属性
+    QGridLayout *settingsLayout;
     QWidget *inputTab = new QWidget;            // 属性输入
     QWidget *attackTab = new QWidget;           // 攻击提升收益
     QWidget *eAttackTab = new QWidget;          // 元素攻击提升收益
     QWidget *defenseBreakTab = new QWidget;     // 破防提升收益
     QWidget *accuracyTab = new QWidget;         // 命中提升收益
     QWidget *criticalTab = new QWidget;         // 会心提升收益
-    QWidget *settingTab = new QWidget;          // 设置
+    QWidget *settingsTab = new QWidget;          // 设置
 
     int defense;
     int aegis;
@@ -77,8 +83,9 @@ private:
     int advantage;
     int accuracy;
     int cHit;
-    int cDamage;
-    int bCRate;
+    double cDamage;
+    double bCRate;
+    double rPercentage;
 
     QLabel *attackLabel;            //攻击        Attack
     QLineEdit *attackLineEdit;
@@ -98,6 +105,8 @@ private:
     QLineEdit *cDamageLineEdit;
     QLabel *bCRateLabel;            //额外会心率     Bonus Critical Rate
     QLineEdit *bCRateLineEdit;
+    QLabel *rPercentageLabel;        //克制百分比     Restraint Percentage
+    QLineEdit *rPercentageLineEdit;
 
     int rDefense;
     double dReduction;

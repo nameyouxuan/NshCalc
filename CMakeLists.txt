@@ -37,6 +37,9 @@ else()
     else()
         add_executable(NshCalc
             ${PROJECT_SOURCES}
+            README.md
+            README.md
+            download.h download.cpp
         )
     endif()
 endif()

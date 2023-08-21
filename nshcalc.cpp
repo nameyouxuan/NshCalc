@@ -1,14 +1,14 @@
 #include "nshcalc.h"
-#include <QVBoxLayout>
-#include <QTabWidget>
-#include <QLabel>
+#include <QStatusBar>
 #include <QDebug>
+#include <QTextEdit>
+#include <QHBoxLayout>
 
 NshCalc::NshCalc(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("逆水寒计算器"));
-    QIcon icon("favicon.ico");
+    QIcon icon("../NshCalc/favicon.ico");
     this->setWindowIcon(icon);
     tabWidget = new QTabWidget(this);
 
@@ -19,29 +19,21 @@ NshCalc::NshCalc(QWidget *parent)
     block = 540;
     cResistance = 150;
 
+
     // 将标签页添加到 QTabWidget
     tabWidget->addTab(inputTab, "属性输入");
-    tabWidget->addTab(attackTab, "攻击提升收益");
-    tabWidget->addTab(eAttackTab, "元素攻击提升收益");
-    tabWidget->addTab(defenseBreakTab, "破防提升收益");
-    tabWidget->addTab(accuracyTab, "命中提升收益");
-    tabWidget->addTab(criticalTab, "会心提升收益");
-    tabWidget->addTab(settingTab, "设置");
+//    tabWidget->addTab(attackTab, "攻击提升收益");
+//    tabWidget->addTab(eAttackTab, "元素攻击提升收益");
+//    tabWidget->addTab(defenseBreakTab, "破防提升收益");
+//    tabWidget->addTab(accuracyTab, "命中提升收益");
+//    tabWidget->addTab(criticalTab, "会心提升收益");
+    tabWidget->addTab(settingsTab, "设置");
 
-
-    //    QWidget *tab1 = new QWidget();  // 属性输入
-    //    QWidget *tab2 = new QWidget();  // 攻击提升收益
-    //    QWidget *tab3 = new QWidget();  // 元素攻击提升收益
-    //    QWidget *tab4 = new QWidget();  // 破防提升收益
-    //    QWidget *tab5 = new QWidget();  // 命中提升收益
-    //    QWidget *tab6 = new QWidget();  // 会心提升收益
-
-    //    setupInputTab(inputTab);
-
-    inputLayout = new QGridLayout(this);
+    inputLayout = new QGridLayout(inputTab);
+    settingsLayout = new QGridLayout(settingsTab);
 
     setupInputTab(inputLayout);
-
+    setupSettingsTab(settingsLayout);
 
     inputTab->setLayout(inputLayout);
 
@@ -56,6 +48,7 @@ NshCalc::NshCalc(QWidget *parent)
 
     // 将中央部件设置为主窗口的中央部件
     setCentralWidget(centralWidget);
+    statusBar()->showMessage(tr("Version: 1.0    Powered by Github:nameyouxuan"));
 }
 
 
@@ -71,13 +64,13 @@ void NshCalc::setupInputTab(QGridLayout *layout)
 
     QGridLayout *inputLayout1 = new QGridLayout(tmpLayout1);
 
-    selectComboBox->addItem(tr("英雄舞阳Boss"));
+    selectComboBox->addItem(tr("英雄舞阳老四"));
+    selectComboBox->addItem(tr("英雄舞阳老五"));
+    selectComboBox->addItem(tr("英雄舞阳老六"));
     selectComboBox->addItem(tr("帮会木桩"));
     inputLayout1->addWidget(selectComboBox);
     tmpLayout1->setLayout(inputLayout1);
 
-
-    //    connect(selectComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), layout, &NshCalc::comboBoxIndexChanged);
     connect(selectComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(onComboBoxChanged(int)));
 
     defenseLabel = new QLabel(tr("防御"));
@@ -173,6 +166,12 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     inputLayout2->addWidget(bCRateLineEdit, 4, 8);
     connect(bCRateLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
 
+    rPercentageLabel = new QLabel(tr("克制百分比"));
+    rPercentageLineEdit = new QLineEdit;
+    inputLayout2->addWidget(rPercentageLabel, 3, 9);
+    inputLayout2->addWidget(rPercentageLineEdit, 4, 9);
+    connect(rPercentageLineEdit, &QLineEdit::textChanged, this, &NshCalc::calcTmpValue);
+
 
     QWidget *tmpLayout3 = new QWidget;
     QGridLayout *inputLayout3 = new QGridLayout(tmpLayout3);
@@ -190,6 +189,14 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     aARateLineEdit = new QLineEdit;
     aCRateLabel = new QLabel(tr("实际会心率"));
     aCRateLineEdit = new QLineEdit;
+
+    // 设置所有LineEdit为只读模式
+    defenseLineEdit->setReadOnly(true);
+    aegisLineEdit->setReadOnly(true);
+    eResistanceLineEdit->setReadOnly(true);
+    resilienceLineEdit->setReadOnly(true);
+    blockLineEdit->setReadOnly(true);
+    cResistanceLineEdit->setReadOnly(true);
 
     inputLayout3->addWidget(rDefenseLabel, 5, 0);
     inputLayout3->addWidget(rDefenseLineEdit, 6, 0);
@@ -211,39 +218,65 @@ void NshCalc::setupDefenseBreakTab() {}
 void NshCalc::setupAccuracyTab() {}
 void NshCalc::setupCriticalTab() {}
 
-int NshCalc::getValue(QLineEdit *line)
-{
+template <>
+int NshCalc::getValue<int>(QLineEdit *line) {
     bool ok;
-    QString tmpStr;
     QString vStr = line->text();
     int vInt = vStr.toInt(&ok);
     return vInt;
 }
 
+template <>
+double NshCalc::getValue<double>(QLineEdit *line) {
+    bool ok;
+    QString vStr = line->text();
+    double vDouble = vStr.toDouble(&ok);
+    return vDouble;
+}
+
 
 void NshCalc::calc()
 {
-    attack = getValue(attackLineEdit);
-    aPenetration = getValue(aPenetrationLineEdit);
-    sBreak = getValue(sBreakLineEdit);
-    eAttack = getValue(eAttackLineEdit);
-    advantage = getValue(advantageLineEdit);
-    accuracy = getValue(accuracyLineEdit);
-    cHit = getValue(cHitLineEdit);
-    cDamage = getValue(cDamageLineEdit);
-    bCRate = getValue(bCRateLineEdit);
+    attack = getValue<int>(attackLineEdit);
+    aPenetration = getValue<int>(aPenetrationLineEdit);
+    sBreak = getValue<int>(sBreakLineEdit);
+    eAttack = getValue<int>(eAttackLineEdit);
+    advantage = getValue<int>(advantageLineEdit);
+    accuracy = getValue<int>(accuracyLineEdit);
+    cHit = getValue<int>(cHitLineEdit);
+    cDamage = getValue<double>(cDamageLineEdit);
+    bCRate = getValue<double>(bCRateLineEdit);
+    rPercentage = getValue<double>(rPercentageLineEdit);
 }
 
 void NshCalc::onComboBoxChanged(int index)
 {
-    if (index == 1)
+    if (index == 0)
     {
-        defense = 1000;
+        defense = 1600;
         aegis = 206;
         eResistance = 0;
         resilience = 0;
-        block = 265;
-        cResistance = 150;
+        block = 540;
+        cResistance = 200;
+    }
+    else if (index == 1)
+    {
+        defense = 1600;
+        aegis = 206;
+        eResistance = 0;
+        resilience = 0;
+        block = 590;
+        cResistance = 200;
+    }
+    else if (index == 2)
+    {
+        defense = 1600;
+        aegis = 206;
+        eResistance = 0;
+        resilience = 0;
+        block = 620;
+        cResistance = 200;
     }
     else
     {
@@ -251,8 +284,8 @@ void NshCalc::onComboBoxChanged(int index)
         aegis = 206;
         eResistance = 0;
         resilience = 0;
-        block = 540;
-        cResistance = 150;
+        block = 265;
+        cResistance = 200;
     }
 
     defenseLineEdit->setText(QString::number(defense));
@@ -261,6 +294,8 @@ void NshCalc::onComboBoxChanged(int index)
     resilienceLineEdit->setText(QString::number(resilience));
     blockLineEdit->setText(QString::number(block));
     cResistanceLineEdit->setText(QString::number(cResistance));
+
+    calcTmpValue();
 }
 
 void NshCalc::calcTmpValue()
@@ -272,20 +307,37 @@ void NshCalc::calcTmpValue()
     eRReduction = 1.0 * eResistance / (eResistance + 530);      //元素抗性减免
     double tmpAARate = 1.0 * (143.0 * accuracy / (1.0 * accuracy + 713) - 143.0 * block / (1.0 * block + 713) + 95) / 100.0;
     aARate = std::min(tmpAARate, 1.0);              //实际命中率
-    aCRate = ((115.0 * (cHit - cResistance) + 90) / ((cHit - cResistance) + 940) * 1.0 / 100) + bCRate;     //实际会心率
+    aCRate = ((115.0 * (cHit - cResistance) + 90) / (1.0 * (cHit - cResistance) + 940.0) / 100) + 1.0 * bCRate;     //实际会心率
     rDefenseLineEdit->setText(QString::number(rDefense));
     dReductionLineEdit->setText(QString::number(dReduction));
     rAegisLineEdit->setText(QString::number(rAegis));
     eRReductionLineEdit->setText(QString::number(eRReduction));
-    aARateLineEdit->setText(QString::number(aARate));
-    aCRateLineEdit->setText(QString::number(aCRate));
+    aARateLineEdit->setText(QString::number(aARate * 100) + "%");
+    aCRateLineEdit->setText(QString::number(aCRate * 100) + "%");
 }
 
-// 辅助函数，用于设置标签页的内容和布局
-//void NshCalc::setupTab(QWidget *tab, const QString &title, const QString &content)
-//{
-//    QVBoxLayout *layout = new QVBoxLayout(tab);
-//    QLabel *label = new QLabel(content);
-//    layout->addWidget(label);
-//    tab->setLayout(layout);
-//}
+void NshCalc::setupSettingsTab(QGridLayout *layout)
+{
+    QWidget *tmpLayout4 = new QWidget;
+    layout->addWidget(tmpLayout4);
+
+    QLabel *imageLabel = new QLabel;
+    QGridLayout *settingsLayout1 = new QGridLayout(tmpLayout4);
+    QPixmap pixmap("../NshCalc/Nshlogo.jpg");
+    imageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio)); // 调整为200x200，保持宽高比
+    settingsLayout1->addWidget(imageLabel, 0, 0);
+
+    QWidget *tmpLayout5 = new QWidget(tmpLayout4);
+    QHBoxLayout *textLayout = new QHBoxLayout(tmpLayout5);
+    QTextEdit *textEdit1 = new QTextEdit;
+    QString text = "QQ交流群号: 869597313\n";
+    text += "Github: https://github.com/nameyouxuan/NshCalc\n";
+    text += "感谢b站Up: 白宝正不正\n";
+    text += "感谢贴吧星语困: https://tieba.baidu.com/p/8530450428?pn=1\n";
+    text += "\n";
+    text += "沧海月明大区: 剑啸水龙吟帮派";
+    textEdit1->setPlainText(text);
+    textEdit1->setReadOnly(true);
+    textLayout->addWidget(textEdit1);
+    settingsLayout1->addWidget(tmpLayout5, 0, 1);
+}
