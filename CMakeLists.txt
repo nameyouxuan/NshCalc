@@ -13,9 +13,9 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
 set(PROJECT_SOURCES
-        main.cpp
-        nshcalc.cpp
-        nshcalc.h
+        src/main.cpp
+        src/nshcalc.cpp
+        src/nshcalc.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -38,8 +38,8 @@ else()
         add_executable(NshCalc
             ${PROJECT_SOURCES}
             README.md
-            README.md
-            download.h download.cpp
+            src/download.h src/download.cpp
+            .gitignore
         )
     endif()
 endif()

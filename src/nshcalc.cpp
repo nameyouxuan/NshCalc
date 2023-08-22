@@ -8,7 +8,7 @@ NshCalc::NshCalc(QWidget *parent)
     : QMainWindow(parent)
 {
     setWindowTitle(tr("逆水寒计算器"));
-    QIcon icon("../NshCalc/favicon.ico");
+    QIcon icon("../NshCalc/image/favicon.ico");
     this->setWindowIcon(icon);
     tabWidget = new QTabWidget(this);
 
@@ -198,6 +198,13 @@ void NshCalc::setupInputTab(QGridLayout *layout)
     blockLineEdit->setReadOnly(true);
     cResistanceLineEdit->setReadOnly(true);
 
+    rDefenseLineEdit->setReadOnly(true);
+    dReductionLineEdit->setReadOnly(true);
+    rAegisLineEdit->setReadOnly(true);
+    eRReductionLineEdit->setReadOnly(true);
+    aARateLineEdit->setReadOnly(true);
+    aCRateLineEdit->setReadOnly(true);
+
     inputLayout3->addWidget(rDefenseLabel, 5, 0);
     inputLayout3->addWidget(rDefenseLineEdit, 6, 0);
     inputLayout3->addWidget(dReductionLabel, 5, 1);
@@ -323,7 +330,7 @@ void NshCalc::setupSettingsTab(QGridLayout *layout)
 
     QLabel *imageLabel = new QLabel;
     QGridLayout *settingsLayout1 = new QGridLayout(tmpLayout4);
-    QPixmap pixmap("../NshCalc/Nshlogo.jpg");
+    QPixmap pixmap("../NshCalc/image/Nshlogo.jpg");
     imageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio)); // 调整为200x200，保持宽高比
     settingsLayout1->addWidget(imageLabel, 0, 0);
 
