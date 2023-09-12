@@ -1,0 +1,98 @@
+
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+        include:
+          - os: ubuntu-latest
+            target: x11
+          - os: ubuntu-latest
+            target: wayland
+          - os: fedora-latest
+            target: x11
+          - os: fedora-latest
+            target: wayland
+          - os: archlinux-latest
+            target: x11
+          - os: archlinux-latest
+            target: wayland
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Install dependencies (Ubuntu)
+      if: startsWith(matrix.os, 'ubuntu')
+      run: |
+        sudo apt update
+        sudo apt install -y qt5-default qt5-qmake build-essential
+        # Additional dependencies for Wayland support
+        if [ "${{ matrix.target }}" = "wayland" ]; then
+          sudo apt install -y qtwayland5
+        fi
+
+    - name: Install dependencies (Fedora)
+      if: startsWith(matrix.os, 'fedora')
+      run: |
+        sudo dnf install -y qt5-qtbase-devel gcc-c++
+        # Additional dependencies for Wayland support
+        if [ "${{ matrix.target }}" = "wayland" ]; then
+          sudo dnf install -y qt5-qtwayland
+        fi
+
+    - name: Install dependencies (Arch Linux)
+      if: startsWith(matrix.os, 'archlinux')
+      run: |
+        sudo pacman -Syu --noconfirm qt5-base make gcc
+        # Additional dependencies for Wayland support
+        if [ "${{ matrix.target }}" = "wayland" ]; then
+          sudo pacman -Syu --noconfirm qt5-wayland
+        fi
+
+    - name: Install dependencies (macOS)
+      if: startsWith(matrix.os, 'macos')
+      run: |
+        brew install qt5
+        echo "/usr/local/opt/qt/bin" >> $GITHUB_PATH
+
+    - name: Install dependencies (Windows)
+      if: startsWith(matrix.os, 'windows')
+      run: |
+        choco install qtcreator --params="'/AddToPath:1'"
+        refreshenv
+
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        qmake ..
+        make
+
+    - name: Package
+      run: |
+        # Package your application here
+
+    - name: Create Release
+      uses: actions/create-release@v1
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./your_packaged_application
+        asset_name: your_packaged_application
+        asset_content_type: application/octet-stream
