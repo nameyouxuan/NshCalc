@@ -43,6 +43,8 @@ else()
             .gitignore
             settings.json
             image/favicon.ico image/Nshlogo.jpg
+            image/favicon.ico
+            image/Nsh-Settings.png image/Nsh-Calc.gif
         )
     endif()
 endif()

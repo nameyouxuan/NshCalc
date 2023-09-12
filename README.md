@@ -2,6 +2,11 @@
 
 逆水寒计算器
 
+# 演示
+![](image/Nsh-Calc.gif)
+
+![](image/Nsh-Settings.png)
+
 # 开发
 
 ## 关键词中英文对照
