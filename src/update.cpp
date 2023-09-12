@@ -5,17 +5,28 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <QDir>
 
 Update::Update(QObject *parent) : QObject(parent)
 {
     QFile file("../NshCalc/settings.json");
-    QByteArray jsonData = file.readAll();
-    file.close();
 
+    if (!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Error1:" << file.errorString();
+        QMessageBox::warning(nullptr, "File Error", "Failed to open settings.json");
+        return;
+    }
+
+    // 读取JSON文件的全部内容
+    QByteArray jsonData = file.readAll();
+
+    // 解析JSON数据
     QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
     if (doc.isNull())
     {
+        qDebug() << "Error2:" << file.errorString();
         QMessageBox::warning(nullptr, "JSON Error", "Failed to parse JSON.");
         return;
     }
@@ -32,6 +43,8 @@ Update::Update(QObject *parent) : QObject(parent)
             url = jsonObj["url"].toString();
         }
     }
+    qDebug() << doc.toJson(QJsonDocument::Indented);
+    file.close();
 
     networkManager = new QNetworkAccessManager(this);
     connect(networkManager, &QNetworkAccessManager::finished, this, &Update::onResult);
