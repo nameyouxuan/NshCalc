@@ -156,6 +156,6 @@ private:
     QLabel *criticalBonus40Label;   // 会心提升40点
     QLineEdit *criticalBonus40LineEdit;
 
-    QPushButton *calcButton;        //计算
+    QPushButton *updateButton;        // 更新
 };
 #endif // NSHCALC_H

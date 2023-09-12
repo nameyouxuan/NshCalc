@@ -1,4 +1,5 @@
 #include "nshcalc.h"
+#include "update.h"
 #include <QStatusBar>
 #include <QDebug>
 #include <QTextEdit>
@@ -347,4 +348,15 @@ void NshCalc::setupSettingsTab(QGridLayout *layout)
     textEdit1->setReadOnly(true);
     textLayout->addWidget(textEdit1);
     settingsLayout1->addWidget(tmpLayout5, 0, 1);
+
+    QWidget *tmpLayout6 = new QWidget(tmpLayout4);
+    QHBoxLayout *updateLayout = new QHBoxLayout(tmpLayout6);
+    updateButton = new QPushButton(tr("更新"));
+    Update *updater = new Update(this);
+    if(!connect(updateButton, &QPushButton::clicked, updater, &Update::checkForUpdates)) {
+        qDebug() << "Failed to connect";
+    }
+
+    updateLayout->addWidget(updateButton);
+    settingsLayout1->addWidget(tmpLayout6);
 }

@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt5 COMPONENTS Core Gui Widgets Network REQUIRED)
 
 set(PROJECT_SOURCES
         src/main.cpp
@@ -38,13 +39,16 @@ else()
         add_executable(NshCalc
             ${PROJECT_SOURCES}
             README.md
-            src/download.h src/download.cpp
+            src/update.h src/update.cpp
             .gitignore
+            settings.json
+            image/favicon.ico image/Nshlogo.jpg
         )
     endif()
 endif()
 
-target_link_libraries(NshCalc PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+#target_link_libraries(NshCalc PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(NshCalc PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Network)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
